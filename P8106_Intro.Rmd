@@ -26,6 +26,23 @@ According to the World Health Organization (WHO) stroke is the 2nd leading cause
 
 Data Source: https://www.kaggle.com/fedesoriano/stroke-prediction-dataset
 
+All the features we had:
+
+- id: unique identifier
+- gender: "Male", "Female" or "Other"
+- age: age of the patient
+- hypertension: 0 if the patient doesn't have hypertension, 1 if the patient has hypertension
+- heart_disease: 0 if the patient doesn't have any heart diseases, 1 if the patient has a heart disease
+- ever_married: "No" or "Yes"
+- work_type: "children", "Govt_jov", "Never_worked", "Private" or "Self-employed"
+- Residence_type: "Rural" or "Urban"
+- avg_glucose_level: average glucose level in blood
+- bmi: body mass index
+- smoking_status: "formerly smoked", "never smoked", "smokes" or "Unknown"*
+- stroke: 1 if the patient had a stroke or 0 if not
+*Note: "Unknown" in smoking_status means that the information is unavailable for this patient
+
+
 ### Import Data
 ```{r data prep}
 stroke_df = read.csv("./data/healthcare-dataset-stroke-data.csv")
@@ -55,7 +72,7 @@ We find out there are 201 observations with missing values in BMI. Among these m
 
 Our main task for this project is to find out the appropriate models that have a better performance on prediction by comparing several models' performance. 
 
-First, we have to figure out how to deal with the missing values, since the missing data reside only in the BMI variable, and it is a continuous variable. We can discuss how to impute these values. Plus, we will also examine if there is any correlation among features. 
+First, we have to convert character variables into factors, so that we can add them into our model and proceed with the analysis. We also have to figure out how to deal with the missing values, since the missing data reside only in the BMI variable, and it is a continuous variable. We can discuss how to impute these values, such as taking an average BMI for the stroke group and the non-stroke group respectively. Plus, we will also examine if there is any correlation among features. 
 
 Second, we have to handle the imbalanced distribution among stroke and non-stroke groups. The imbalance distribution problem can be solved via the sampling method in cross-validation.
 

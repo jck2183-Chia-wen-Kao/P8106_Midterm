@@ -18,19 +18,19 @@ Your report should have the following sections (you can add other sections if yo
 ## Introduction
 *Describe your data set. Provide proper motivation for your work.*
 ### What questions are you trying to answer?
-CK-Which model performs better on the dataset of interest?
-CK-Which feature brings more information to the outcome of interest?
-CK-Which model has the best interpretability?
+- Which model performs better on the dataset of interest?
+- Which feature brings more information to the outcome of interest?
+- Which model has the best interpretability?
  
 ### How did you prepare and clean the data?
 If it’s from  kaggle, it’s already cleaned… 
-CK- Is there any correlation among features?
-CK-Specify how we partition the dataset instead?
-CK-(Alternatively)How will we deal with missing values?
+- Is there any correlation among features?
+- Specify how we partition the dataset instead?
+- (Alternatively)How will we deal with missing values?
  
 ## Exploratory analysis/visualization
 ### Is there any interesting structure present in the data?
-CK-Do descriptive analysis on each feature and observe their distribution.
-What were your findings?
-CK-If there’s anything interesting, put it down.
+*Do descriptive analysis on each feature and observe their distribution.*
+### What were your findings?
+If there’s anything interesting, put it down.
 Here you can use any techniques as long as they are adequately explained. If you cannot find anything interesting, then describe what you tried and show that there isn’t much visible structure. Data science is NOT manipulating the data in some way until you get an answer.

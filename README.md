@@ -1,9 +1,9 @@
 # P8106_Midterm
 
 ### Required dataset criteria:
-Supervised machine learning
-At least 5 predictors in the dataset
-At least 100 observations
+Supervised machine learning </br>
+At least 5 predictors in the dataset </br>
+At least 100 observations </br>
 
 
 ## Dataset of interest: https://www.kaggle.com/fedesoriano/stroke-prediction-dataset

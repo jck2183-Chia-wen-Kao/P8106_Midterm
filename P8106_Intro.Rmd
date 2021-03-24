@@ -47,24 +47,25 @@ All the features we had:
 ```{r data prep}
 stroke_df = read.csv("./data/healthcare-dataset-stroke-data.csv")
 # head(stroke_df)
+
 stroke_df$stroke = as.factor(stroke_df$stroke)
+stroke_df$gender = as.factor(stroke_df$gender)
+stroke_df$ever_married = as.factor(stroke_df$ever_married)
+stroke_df$work_type = as.factor(stroke_df$work_type)
+stroke_df$Residence_type = as.factor(stroke_df$Residence_type)
+stroke_df$smoking_status = as.factor(stroke_df$smoking_status)
+stroke_df$heart_disease = as.factor(stroke_df$heart_disease)
+stroke_df$hypertension = as.factor(stroke_df$hypertension)
+stroke_df$work_type = as.factor(stroke_df$work_type)
+stroke_df$bmi = as.numeric(stroke_df$bmi)
 
 stroke_df = stroke_df %>% 
     mutate(stroke = recode(stroke, 
                            `0` = "no stroke", 
                            `1` = "stroke")) %>% 
-    na.omit() %>% 
     select(-id) 
 
 summary(stroke_df)
-
-sapply("N/A", grepl, x=stroke_df)
-bmi.index = stroke_df %>% filter(stroke_df$bmi == "N/A")
-dim(bmi.index)
-bmi.index %>% 
-    filter(bmi.index$stroke == "stroke") %>% 
-    dim()
-
 ```
 The imported dataset has 5110 observations in total. Excluding the id, we only gave 10 features and one binary outcome variable-stroke (0:no stroke, 1:stroke). We found that the stroke outcome distribution is imbalanced with 4861 observations have no stroke while 249 observations have a stroke.
 
@@ -72,7 +73,7 @@ We find out there are 201 observations with missing values in BMI. Among these m
 
 Our main task for this project is to find out the appropriate models that have a better performance on prediction by comparing several models' performance. 
 
-First, we have to convert character variables into factors, so that we can add them into our model and proceed with the analysis. We also have to figure out how to deal with the missing values, since the missing data reside only in the BMI variable, and it is a continuous variable. We can discuss how to impute these values, such as taking an average BMI for the stroke group and the non-stroke group respectively. Plus, we will also examine if there is any correlation among features. 
+First, we have to convert character variables into factors, so that we can add them into our model and proceed with the analysis. We also have to figure out how to deal with the missing values, since the missing data reside only in the BMI variable, and it is a continuous variable. We can discuss how to impute these values, such as taking an average BMI for the stroke group and the non-stroke group respectively. Plus, we will also examine if there is any correlation among features. Meanwhile, we also found there are some unreasonable values that appear in the data such as the minimum age is 0.08, minimum BMI is 10, and so on. There is also an observation who identified their gender as "Other". We need to discuss if we need to remove them or how to deal with them.
 
 Second, we have to handle the imbalanced distribution among stroke and non-stroke groups. The imbalance distribution problem can be solved via the sampling method in cross-validation.
 

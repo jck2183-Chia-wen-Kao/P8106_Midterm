@@ -48,6 +48,6 @@ Here you can use any techniques as long as they are adequately explained. If you
 - avg_glucose_level: average glucose level in blood
 - bmi: body mass index
 - smoking_status: "formerly smoked", "never smoked", "smokes" or "Unknown"*
-- stroke: 1 if the patient had a stroke or 0 if not
+- stroke: 1 if the patient had a stroke or 0 if not /n
 *Note: "Unknown" in smoking_status means that the information is unavailable for this patient*
 

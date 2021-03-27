@@ -1,7 +1,7 @@
 ---
-title: "P8106_Midterm_jck2183"
+title: "P8106_Midterm"
 author: "jck2183_Chia-wen Kao"
-date: "2021/3/23"
+date: "2021/3/26"
 output: pdf_document
 ---
 
@@ -18,6 +18,11 @@ library(pROC) #generate ROC curve and calculate AUC
 library(pdp) #partial dependent plot
 library(vip) #variable importance plot: global impact on different predictor
 library(AppliedPredictiveModeling) # for visualization purpose
+library(corrplot)
+library(RColorBrewer)
+library(RANN)
+library(visdat)
+library(mgcv)
 ```
 
 ## Introduction: 
@@ -49,28 +54,32 @@ stroke_df = read.csv("./data/healthcare-dataset-stroke-data.csv")
 # head(stroke_df)
 
 stroke_df$stroke = as.factor(stroke_df$stroke)
-stroke_df$gender = as.factor(stroke_df$gender)
-stroke_df$ever_married = as.factor(stroke_df$ever_married)
-stroke_df$work_type = as.factor(stroke_df$work_type)
-stroke_df$Residence_type = as.factor(stroke_df$Residence_type)
-stroke_df$smoking_status = as.factor(stroke_df$smoking_status)
-stroke_df$heart_disease = as.factor(stroke_df$heart_disease)
-stroke_df$hypertension = as.factor(stroke_df$hypertension)
-stroke_df$work_type = as.factor(stroke_df$work_type)
+stroke_df$gender = factor(stroke_df$gender) %>% as.numeric()
+stroke_df$ever_married = factor(stroke_df$ever_married) %>% as.numeric()
+stroke_df$work_type = factor(stroke_df$work_type) %>% as.numeric()
+stroke_df$Residence_type = factor(stroke_df$Residence_type) %>% as.numeric()
+stroke_df$smoking_status = factor(stroke_df$smoking_status) %>% as.numeric()
+stroke_df$heart_disease = factor(stroke_df$heart_disease) %>% as.numeric()
+stroke_df$hypertension = as.numeric(factor(stroke_df$hypertension))
+stroke_df$work_type = as.factor(stroke_df$work_type) %>% as.numeric()
 stroke_df$bmi = as.numeric(stroke_df$bmi)
 
-stroke_df = stroke_df %>% 
+stroke_df = stroke_df[, -1] %>% 
     mutate(stroke = recode(stroke, 
-                           `0` = "no stroke", 
-                           `1` = "stroke")) %>% 
-    select(-id) %>% 
-    filter(gender != "Other")
+                           `0` = "No", 
+                           `1` = "Yes"), 
+           stroke = factor(stroke)) %>% 
+    filter(gender < 3) 
+
 
 summary(stroke_df)
+vis_miss(stroke_df)
+
 ```
+
 The imported dataset has 5110 observations in total. Excluding the id, we only gave ten features and one binary outcome variable-stroke (0:no stroke, 1:stroke). We found that the stroke outcome distribution is imbalanced with 4861 observations have no stroke while 249 observations have a stroke.
 
-We find out there are 201 observations with missing values in BMI. Among these missing values, 40 observations have a stroke while 161 observations without stroke. We will then apply preprocess imputation in the caret train function to address the imputation problem.
+We find out there are 201 observations with missing values in BMI. Among these missing values, 40 observations have a stroke while 161 observations without stroke. We will then apply preprocess imputation in the caret train function to address the imputation problem. We also have 1544 unknown in smoke status, will treat those who answered unknown as a variable so no need to impute them.
 
 Our main task is to find out the appropriate models that have a better performance on prediction by comparing several models' performance. 
 
@@ -78,3 +87,21 @@ First, we have to convert character variables into factors to add them into our 
 
 
 Next, the characteristics of features will help us determine which model would be proper. As the outcome is binary, and the features are mixtures of continuous and categorical variables. We also have to decide how to partition the train and test data, which cross-validation method to use. Evaluation metrics should be used and set up a reasonable tuning grid corresponding to the tuning parameter.
+
+## Exploratory Data Analysis
+Partition the dataset, I will use 70% as training data and 30% as test data.
+```{r}
+set.seed(123)
+trRow = createDataPartition(y = stroke_df$stroke, p = 0.7, list = F)
+train.data = stroke_df[trRow, ]
+test.data = stroke_df[-trRow, ] 
+```
+
+Try imputation with `preProcess() `
+```{r}
+knnImp = preProcess(train.data, method = "knnImpute", k = 3)
+train.data = predict(knnImp, train.data)
+vis_miss(train.data)
+test.data = predict(knnImp,test.data)
+vis_miss(test.data)
+```
